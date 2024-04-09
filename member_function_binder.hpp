@@ -10,14 +10,14 @@ public:
   using FuncType = std::shared_ptr<std::function<void(FuncArgs...)>>;
   static void CallbackFunc(FuncArgs... args) {
     if (func_cb_) {
-      (*func_cb_)(args...);
+      (*func_cb_)(std::forward<FuncArgs>(args)...);
     } else {
       std::cout << "callback is empty" << std::endl;
     }
   }
 
   static void RegisterCb(FuncType func) {
-    func_cb_ = func;
+    func_cb_ = std::move(func);
   }
 
   static FuncType func_cb_;
